@@ -7,7 +7,18 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    @all_ratings = Movie.all_ratings
+    if (params.include?('commit'))
+      @ratings_to_show = []
+      for rating in params['ratings']
+        @ratings_to_show << rating[0]
+      end
+      print(@ratings_to_show)
+      @movies = Movie.with_ratings(@ratings_to_show)
+    else
+      @ratings_to_show = @all_ratings
+      @movies = Movie.all
+    end
   end
 
   def new
